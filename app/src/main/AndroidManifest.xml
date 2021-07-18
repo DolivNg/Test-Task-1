@@ -15,7 +15,8 @@
         android:theme="@style/Theme.TestTask"
         android:orientation="vertical">
         <activity android:name=".MainActivity"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:screenOrientation="portrait">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
