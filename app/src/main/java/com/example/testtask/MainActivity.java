@@ -34,15 +34,17 @@ import static java.security.AccessController.getContext;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    private static final String URL_LINK = "http://demo3005513.mockable.io/api/v1/entities/getAllIds";
-    private  TextView tVText;
+    private static final String URL_LINK_A = "http://demo3005513.mockable.io/api/v1/entities/getAllIds";
+    private static final String URL_LINK_B = "https://demo3005513.mockable.io/api/v1/object/";
+    private TextView tVText;
     private ImageView imageView;
     private WebView webView;
     private int viewId = 0;
-    private Button bttnNext ;
+    private Button bttnNext;
 
     private List<String> listB = null;
     private JSONObject jObj = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,13 +72,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.bttnNext:
                 /**ID chosen */
-                if (viewId<listB.size()-2)
+                if (viewId < listB.size() - 2)
                     viewId++;
                 else
-                    viewId=0;
+                    viewId = 0;
                 /**Start parsing JSON B*/
                 ParsingB parsingB = new ParsingB();
                 parsingB.execute();
@@ -91,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.onPreExecute();
 
         }
+
         private JSONArray names;
         private JSONArray values;
 
@@ -102,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             try {
                 /**Load JSON B*/
-                url = new URL("https://demo3005513.mockable.io/api/v1/object/" + listB.get(viewId));
+                url = new URL(URL_LINK_B + listB.get(viewId));
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.connect();
                 in = new java.io.BufferedReader(new java.io.InputStreamReader(urlConnection.getInputStream()));
@@ -137,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     if (names.getString(i).equals("type"))
                         if (values.getString(i).equals("text")) {
-                            tVText.setText(values.getString(i+1));
+                            tVText.setText(values.getString(i + 1));
                             /**Visibility*/
                             tVText.setVisibility(View.VISIBLE);
                             webView.setVisibility(View.GONE);
@@ -145,13 +148,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         } else if (values.getString(i).equals("webview")) {
                             /**Visibility*/
                             webView.loadUrl(
-                                    values.getString(i+1)
+                                    values.getString(i + 1)
                             );
                             tVText.setVisibility(View.GONE);
                             webView.setVisibility(View.VISIBLE);
                             imageView.setVisibility(View.GONE);
                         } else if (values.getString(i).equals("image")) {
-                            Picasso.get().load(values.getString(i+1)).into(imageView);
+                            Picasso.get().load(values.getString(i + 1)).into(imageView);
                             /**Visibility*/
                             tVText.setVisibility(View.GONE);
                             webView.setVisibility(View.GONE);
@@ -159,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.d("MainActivity", "CRASH " );
+                    Log.d("MainActivity", "CRASH ");
                 }
             }
 
@@ -183,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             try {
                 /**Connect to site*/
-                url = new URL(URL_LINK);
+                url = new URL(URL_LINK_A);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.connect();
                 /**Get string info and create JSON*/
@@ -196,9 +199,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 JSONArray names = jObj.names();
                 JSONArray values = jObj.toJSONArray(names);
                 /**Convert JSON to ArrayList listB*/
-                for(int i=0; i<values.length(); i++) {
+                for (int i = 0; i < values.length(); i++) {
                     if (names.getString(i).equals("data")) {
-                        for(int j=0;j<values.getJSONArray(i).length();j++)
+                        for (int j = 0; j < values.getJSONArray(i).length(); j++)
                             listB.add(values.getJSONArray(i).getJSONObject(j).getString("id"));//.getString(j));
                     }
                 }
@@ -218,12 +221,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.onPostExecute(aVoid);
         }
     }
-
-
-
-
-
-
 
 
 }
