@@ -182,10 +182,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             java.io.BufferedReader in = null;
 
             try {
+                /**Connect to site*/
                 url = new URL(URL_LINK);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.connect();
-
+                /**Get string info and create JSON*/
                 in = new java.io.BufferedReader(new java.io.InputStreamReader(urlConnection.getInputStream()));
                 String line;
                 for (; (line = in.readLine()) != null; ) {
@@ -194,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 JSONArray names = jObj.names();
                 JSONArray values = jObj.toJSONArray(names);
-
+                /**Convert JSON to ArrayList listB*/
                 for(int i=0; i<values.length(); i++) {
                     if (names.getString(i).equals("data")) {
                         for(int j=0;j<values.getJSONArray(i).length();j++)
